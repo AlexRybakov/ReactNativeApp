@@ -1,15 +1,15 @@
 import { InputText } from './TodoInput.styles';
 
-type Props = {
-  todo: string;
-  setTodo: React.Dispatch<React.SetStateAction<string>>;
-};
+interface Props {
+  todoTitle: string;
+  setTodoTitle: (title: string) => void;
+}
 
-const TodoInput = ({ todo, setTodo }: Props) => {
+const TodoInput = ({ todoTitle, setTodoTitle }: Props) => {
   return (
     <InputText
-      value={todo}
-      onChangeText={(text) => setTodo(text)}
+      value={todoTitle}
+      onChangeText={setTodoTitle}
       placeholder='Введите задачу'
     />
   );

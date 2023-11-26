@@ -4,30 +4,28 @@ import { IconButton } from 'react-native-paper';
 
 import { ITodo } from '../TodoList/TodoList';
 
-import { RootRenderItem, Title, TitleDone } from './TodoItem.styles';
+import { Root, Title, TitleDone } from './TodoItem.styles';
 
-type Props = {
+interface Props {
   item: ITodo;
   handleEditTodo: (item: ITodo) => void;
   handleDeleteTodo: (id: string) => void;
-};
+}
 
 const TodoItem = ({ item, handleEditTodo, handleDeleteTodo }: Props) => {
   const [checked, setChecked] = useState(false);
   const toggleCheckbox = () => setChecked(!checked);
 
+  const { title, id } = item;
+
   return (
-    <RootRenderItem>
+    <Root>
       <CheckBox
         checked={checked}
         onPress={toggleCheckbox}
         checkedColor='#7CFC00'
       />
-      {!checked ? (
-        <Title>{item.title}</Title>
-      ) : (
-        <TitleDone>{item.title}</TitleDone>
-      )}
+      {!checked ? <Title>{title}</Title> : <TitleDone>{title}</TitleDone>}
       <IconButton
         icon='pencil'
         iconColor='#1e90ff'
@@ -36,9 +34,9 @@ const TodoItem = ({ item, handleEditTodo, handleDeleteTodo }: Props) => {
       <IconButton
         icon='trash-can'
         iconColor='#1e90ff'
-        onPress={() => handleDeleteTodo(item.id)}
+        onPress={() => handleDeleteTodo(id)}
       />
-    </RootRenderItem>
+    </Root>
   );
 };
 

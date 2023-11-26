@@ -1,23 +1,22 @@
 import React from 'react';
 import { Card } from 'react-native-paper';
 
-import { Item } from '../CardList/CardList';
-
 import { RootRenderItemCard } from './CardItem.styles';
 
-type Props = {
-  item: Item;
-};
+export interface Props {
+  id: string;
+  title: string;
+  text: string;
+  url: string;
+}
 
-const CardItem = ({ item }: Props) => {
-  return (
-    <RootRenderItemCard>
-      <Card>
-        <Card.Cover source={{ uri: item.url }} />
-        <Card.Title title={item.title} subtitle={item.text} />
-      </Card>
-    </RootRenderItemCard>
-  );
-};
+const CardItem = ({ url, text, title }: Props) => (
+  <RootRenderItemCard>
+    <Card>
+      <Card.Cover source={{ uri: url }} />
+      <Card.Title title={title} subtitle={text} />
+    </Card>
+  </RootRenderItemCard>
+);
 
 export default CardItem;

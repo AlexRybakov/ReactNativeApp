@@ -12,20 +12,26 @@ export interface ITodo {
   title: string;
 }
 
+const REFRESH_DELAY = 2000;
+
 const TodoList = () => {
-  const [todo, setTodo] = useState('');
-  const [todoList, setTodoList] = useState([{ id: 's', title: 'TEST' }]);
-  const [editedTodo, setEditedTodo] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
+  const [todoTitle, setTodoTitle] = useState<string>('');
+  const [todoList, setTodoList] = useState<ITodo[]>([]);
+  const [editedTodo, setEditedTodo] = useState<ITodo | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const clearTodoInput = () => {
+    setTodoTitle('');
+  };
 
   const handleAddTodo = () => {
-    if (todo === '') {
+    if (todoTitle === '') {
       return;
     }
 
     Keyboard.dismiss();
-    setTodoList([...todoList, { id: Date.now().toString(), title: todo }]);
-    setTodo('');
+    setTodoList([...todoList, { id: Date.now().toString(), title: todoTitle }]);
+    clearTodoInput();
   };
 
   const handleDeleteTodo = (id: string) => {
@@ -33,37 +39,39 @@ const TodoList = () => {
     setTodoList(updatedTodoList);
   };
 
-  const handleEditTodo = (todo: any) => {
+  const handleEditTodo = (todo: ITodo) => {
     setEditedTodo(todo);
-    setTodo(todo.title);
+    setTodoTitle(todo.title);
   };
 
   const handleUpdateTodo = () => {
-    const updatedTodos = todoList.map((item) => {
-      // @ts-ignore: Object is possibly 'null'.
-      if (item.id === editedTodo.id) {
-        return { ...item, title: todo };
-      }
-
-      return item;
-    });
-
+    if (editedTodo === null) {
+      return;
+    }
     Keyboard.dismiss();
-    setTodoList(updatedTodos);
+    setTodoList(
+      todoList.map((item) => {
+        if (item.id === editedTodo.id) {
+          return { ...item, title: todoTitle };
+        }
+
+        return item;
+      })
+    );
     setEditedTodo(null);
-    setTodo('');
+    clearTodoInput();
   };
 
-  const onRefreshs = useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, REFRESH_DELAY);
   }, []);
 
   return (
     <Root>
-      <TodoInput todo={todo} setTodo={setTodo} />
+      <TodoInput todoTitle={todoTitle} setTodoTitle={setTodoTitle} />
       <TodoButton
         editedTodo={editedTodo}
         handleUpdateTodo={handleUpdateTodo}
@@ -80,8 +88,8 @@ const TodoList = () => {
         )}
         keyExtractor={(item) => item.id}
         scrollEnabled={true}
-        refreshing={false}
-        onRefresh={() => onRefreshs}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </Root>
   );

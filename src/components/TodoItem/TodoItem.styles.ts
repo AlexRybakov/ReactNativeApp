@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
 
-export const RootRenderItem = styled.View`
+export const Root = styled.View`
   background-color: white;
   border-radius: 6px;
   padding-top: 8px;

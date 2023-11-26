@@ -2,27 +2,22 @@ import { useState, useCallback, useEffect } from 'react';
 import { FlatList } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import CardItem from '../CardItem';
+import CardItem, { CardItemProps } from '../CardItem';
 
 import { Root } from './CardList.styles';
 
-export type Item = {
-  id: string;
-  title: string;
-  text: string;
-  url: string;
-};
+const REFRESH_DELAY = 2000;
+const NEWS_URL =
+  'https://65636b22ee04015769a72e9b.mockapi.io/api/reactnative/news';
 
 const CardList = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState<Item[]>([]);
+  const [data, setData] = useState<CardItemProps[]>([]);
 
   const getNews = async () => {
     try {
-      const response = await fetch(
-        'https://65636b22ee04015769a72e9b.mockapi.io/api/reactnative/news'
-      );
+      const response = await fetch(NEWS_URL);
       const json = await response.json();
       setData(json);
     } catch (error) {
@@ -36,11 +31,11 @@ const CardList = () => {
     getNews();
   }, []);
 
-  const onRefreshs = useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, REFRESH_DELAY);
   }, []);
 
   return (
@@ -50,11 +45,11 @@ const CardList = () => {
       ) : (
         <FlatList
           data={data}
-          renderItem={({ item }) => <CardItem item={item} />}
+          renderItem={({ item }) => <CardItem {...item} />}
           keyExtractor={(item) => item.id}
           scrollEnabled={true}
           refreshing={refreshing}
-          onRefresh={() => onRefreshs}
+          onRefresh={onRefresh}
         />
       )}
     </Root>

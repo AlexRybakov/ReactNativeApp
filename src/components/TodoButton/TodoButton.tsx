@@ -1,26 +1,22 @@
-import {
-  ButtonAdd,
-  ButtonChange,
-  TextButtonAdd,
-  TextButtonChange,
-} from './TodoButton.styles';
+import { ITodo } from '../TodoList/TodoList';
+import { ButtonAdd, ButtonChange, Text } from './TodoButton.styles';
 
-type Props = {
-  editedTodo: null;
+interface Props {
+  editedTodo: ITodo | null;
   handleUpdateTodo: () => void;
   handleAddTodo: () => void;
-};
+}
 
 const TodoButton = ({ editedTodo, handleUpdateTodo, handleAddTodo }: Props) => {
   return (
     <>
       {editedTodo ? (
-        <ButtonChange onPress={() => handleUpdateTodo()}>
-          <TextButtonChange>Изменить</TextButtonChange>
+        <ButtonChange onPress={handleUpdateTodo}>
+          <Text>Изменить</Text>
         </ButtonChange>
       ) : (
-        <ButtonAdd onPress={() => handleAddTodo()}>
-          <TextButtonAdd>Добавить</TextButtonAdd>
+        <ButtonAdd onPress={handleAddTodo}>
+          <Text>Добавить</Text>
         </ButtonAdd>
       )}
     </>
